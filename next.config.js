@@ -5,7 +5,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/secure-c2-dashboard' : '',
+  basePath: process.env.BASE_PATH || '',
 };
 
 module.exports = nextConfig;

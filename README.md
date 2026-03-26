@@ -50,7 +50,26 @@ This dashboard provides a comprehensive operational picture with real-time entit
 | Icons | Lucide React |
 | Deployment | GitHub Pages via GitHub Actions |
 
-## Getting Started
+## Quick Start with Docker
+
+```bash
+# Clone and start
+git clone https://github.com/osth0006/secure-c2-dashboard.git
+cd secure-c2-dashboard
+docker-compose up
+
+# Access the dashboard at http://localhost:3000
+```
+
+The Docker build uses a multi-stage process (Node 20 Alpine) to produce a lightweight production image serving the static export via `serve`.
+
+To rebuild after changes:
+
+```bash
+docker-compose up --build
+```
+
+## Getting Started (Local)
 
 ```bash
 # Install dependencies
