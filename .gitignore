@@ -22,7 +22,16 @@
 npm-debug.log*
 
 # local env files
+.env
 .env*.local
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+backend/alembic/versions/*.py
+!backend/alembic/versions/.gitkeep
 
 # typescript
 *.tsbuildinfo

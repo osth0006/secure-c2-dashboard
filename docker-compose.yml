@@ -1,8 +1,48 @@
 services:
-  dashboard:
-    build: .
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: c2dashboard
+      POSTGRES_USER: c2user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U c2user -d c2dashboard"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://c2user:${POSTGRES_PASSWORD:-changeme}@postgres:5432/c2dashboard
+      AISSTREAM_API_KEY: ${AISSTREAM_API_KEY:-}
+      ADSB_RAPIDAPI_KEY: ${ADSB_RAPIDAPI_KEY:-}
+      CORS_ORIGINS: http://localhost:3000
+      INGEST_AIS_ENABLED: ${INGEST_AIS_ENABLED:-true}
+      INGEST_ADSB_ENABLED: ${INGEST_ADSB_ENABLED:-true}
+      INGEST_CELESTRAK_ENABLED: ${INGEST_CELESTRAK_ENABLED:-true}
+      INGEST_STOCKS_ENABLED: ${INGEST_STOCKS_ENABLED:-true}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
     restart: unless-stopped
+
+volumes:
+  pgdata:

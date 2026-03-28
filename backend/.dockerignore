@@ -1,0 +1,8 @@
+__pycache__
+*.pyc
+.env
+.git
+.github
+*.md
+alembic/versions/*.py
+!alembic/versions/.gitkeep

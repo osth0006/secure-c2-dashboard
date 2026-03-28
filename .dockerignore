@@ -1,7 +1,6 @@
-node_modules
-.next
-out
 .git
 .github
 *.md
-.eslintrc.json
+.env
+.env.*
+.claude
